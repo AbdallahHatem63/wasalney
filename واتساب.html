@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>واتساب</title>
+<link rel="icon" type="image/png" href="logo.png">
+<style>
+  :root{
+    --bg:#0f1417;
+    --panel:#111619;
+    --accent:#25D366;
+    --muted:#9aa0a6;
+    --input-bg:#202626;
+  }
+  *{box-sizing:border-box;font-family: "Segoe UI", Tahoma, Geneva, "Noto Sans Arabic", sans-serif}
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    gap:40px;
+    padding:20px;
+    background: linear-gradient(180deg, var(--bg), #0b0f11);
+  }
+  .app{
+    display:flex;
+    flex-direction:column;
+    width:360px;
+    height:600px;
+    background: var(--panel);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    position: relative;
+  }
+  header{
+    height:64px;
+    display:flex;
+    align-items:center;
+    padding:10px 16px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    backdrop-filter: blur(4px);
+  }
+  .avatar{
+    width:40px;height:40px;border-radius:50%;
+    background: linear-gradient(135deg,#1f2933,#122428);
+    display:inline-flex;align-items:center;justify-content:center;
+    margin-left:12px;
+  }
+  .title{
+    display:flex;flex-direction:column;justify-content:center;
+  }
+  .title .name{font-weight:600;font-size:15px}
+  .title .status{font-size:12px;color:var(--muted);margin-top:3px}
+  main.chat{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    padding:18px;
+    overflow:auto;
+    background: rgba(0,0,0,0.05);
+  }
+  .composer{
+    height:50px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:6px 10px;
+    border-top:1px solid rgba(255,255,255,0.03);
+    background: linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.02));
+  }
+  .micro{
+    width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    border:1px solid rgba(255,255,255,0.02);
+    flex:0 0 36px;
+  }
+  .input{
+    flex:1;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background:var(--input-bg);
+    padding:8px 10px;
+    border-radius:20px;
+  }
+  .input input{
+    background:transparent;border:0;outline:none;color: #e6eef0;
+    font-size:14px;width:100%;
+  }
+  footer{
+    background: rgba(255,255,255,0.05);
+    text-align:center;
+    padding:10px;
+    font-size:12px;
+    color: var(--muted);
+    border-top:1px solid rgba(255,255,255,0.1);
+  }
+  .social-icons{
+    margin-top:5px;
+    display:flex;
+    justify-content:center;
+    gap:12px;
+  }
+  .social-icons a{
+    color: #fff;
+    text-decoration:none;
+    font-size:18px;
+  }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="avatar">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyvKop5GGRLWxLxIy3oUrdmmiym3tOQaEDpWfKOMjuMENuhn3-" alt="صورة العميل" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+    </div>
+    <div style="width:12px"></div>
+    <div class="title">
+      <div class="name">Taxi Bader</div>
+      <div class="status">نشط الآن</div>
+    </div>
+  </header>
+  <main class="chat"></main>
+  <div class="composer">
+    <div class="micro"></div>
+    <div class="input"><input placeholder="اكتب رسالة" /></div>
+  </div>
+  <footer>
+    لا تعتبر هذه النسخة النهائية للمستخدم<br>
+    للتواصل معنا
+    <div class="social-icons">
+      <a href="https://www.facebook.com/abdallah.hatem.462120/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://wa.me/201064152956" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      <a href="https://www.instagram.com/beboabdallahh/" target="_blank"><i class="fab fa-instagram"></i></a>
+    </div>
+  </footer>
+</div>
+
+<div class="app">
+  <header>
+    <div class="avatar">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyvKop5GGRLWxLxIy3oUrdmmiym3tOQaEDpWfKOMjuMENuhn3-" alt="صورة الكباتن" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+    </div>
+    <div style="width:12px"></div>
+    <div class="title">
+      <div class="name">جروب الكباتن</div>
+      <div class="status">انقر هنا للاطلاع علي معلومات المجموعه</div>
+    </div>
+  </header>
+  <main class="chat"></main>
+  <div class="composer">
+    <div class="micro"></div>
+    <div class="input"><input placeholder="اكتب رسالة" /></div>
+  </div>
+  <footer>
+    لا تعتبر هذه النسخة النهائية للمستخدم<br>
+    للتواصل معنا
+    <div class="social-icons">
+      <a href="https://www.facebook.com/abdallah.hatem.462120/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://wa.me/201064152956" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      <a href="https://www.instagram.com/beboabdallahh/" target="_blank"><i class="fab fa-instagram"></i></a>
+    </div>
+  </footer>
+</div>
+
+<script>
+const app1 = document.querySelectorAll('.app')[0];
+const app2 = document.querySelectorAll('.app')[1];
+
+const chat1 = app1.querySelector('.chat');
+const chat2 = app2.querySelector('.chat');
+
+const input1 = app1.querySelector('input');
+const input2 = app2.querySelector('input');
+
+function addMessage(chat, text, sender='user') {
+    const msg = document.createElement('div');
+    msg.textContent = text;
+    msg.style.padding = '8px 12px';
+    msg.style.marginBottom = '8px';
+    msg.style.borderRadius = '8px';
+    msg.style.maxWidth = '80%';
+    msg.style.color = '#fff';
+    msg.style.wordBreak = 'break-word';
+    if(sender==='user'){
+        msg.style.background = '#25D366';
+        msg.style.alignSelf = 'flex-end';
+    } else {
+        msg.style.background = '#444';
+        msg.style.alignSelf = 'flex-start';
+    }
+    chat.appendChild(msg);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+// رسالة ترحيبية
+addMessage(chat1, "أهلا بك في خدمة تاكسي بدر، اكتب 1 للرحلة، 2 لتعريف الرحلات، 0 لتقديم شكوى", 'bot');
+
+let state1 = 'start'; 
+let complaintDesc='', complaintClient='', complaintCaptain='';
+let tempTripNumber='';
+
+input1.addEventListener('keydown',(e)=>{
+    if(e.key==='Enter' && input1.value.trim()!==''){
+        const val = input1.value.trim();
+        addMessage(chat1,val,'user');
+
+        if(state1==='start'){
+            addMessage(chat1,'أهلا بك','bot');
+            state1='askedPlace';
+        }
+        else if(state1==='askedPlace'){
+            if(val==='1'){
+                addMessage(chat1,'ممكن تقولي مكانك فين و رايح فين','bot');
+                state1='askedNumber';
+            } 
+            else if(val==='2'){
+                addMessage(chat1,'تعريف الرحلات:\n- فتح عداد: 10 جنيه\n- 7 جنيه لكل كيلو\n- 50 قرش لكل دقيقة','bot');
+            }
+            else if(val==='0'){
+                addMessage(chat1,'ممكن حضرتك توصفلي مشكلتك','bot');
+                state1='complaintDesc';
+            }
+            else if(val==='3'){
+                addMessage(chat1,'تم إلغاء رحلتك','bot');
+                addMessage(chat2,`تم إلغاء الرحلة: رقم العميل ${tempTripNumber}`,'bot');
+                state1='done';
+            }
+            else{
+                addMessage(chat1,'ممكن تقولي رقم حضرتك','bot');
+                state1='askedNumber';
+            }
+        }
+        else if(state1==='askedNumber'){
+            tempTripNumber = val;
+            addMessage(chat1,'رحلة جديدة تم إرسالها للكباتن','bot');
+            addMessage(chat2,`رحلة جديدة: مكان العميل ${val}`,'bot');
+            state1='done';
+        }
+        else if(state1==='complaintDesc'){
+            complaintDesc = val;
+            addMessage(chat1,'ممكن اسم حضرتك','bot');
+            state1='complaintClient';
+        }
+        else if(state1==='complaintClient'){
+            complaintClient = val;
+            addMessage(chat1,'ممكن اسم الكابتن','bot');
+            state1='complaintCaptain';
+        }
+        else if(state1==='complaintCaptain'){
+            complaintCaptain = val;
+            addMessage(chat1,'متأسفين لحضرتك سيتم مراجعة شكوتك الآن','bot');
+            addMessage(chat2,`العميل ${complaintClient} بيشتكي من الكابتن ${complaintCaptain}، نوع الشكوى: ${complaintDesc}`,'bot');
+            state1='done';
+        }
+
+        input1.value='';
+    }
+});
+
+input2.addEventListener('keydown',(e)=>{
+    if(e.key==='Enter' && input2.value.trim()!==''){
+        const val = input2.value.trim();
+        addMessage(chat2,val,'user');
+
+        if(val.toLowerCase()==='قبول'){
+            addMessage(chat1, `كابتن محمد قبل رحلتك. كابتن محمد جاي في الطريق`, 'bot');
+        }
+        else if(val==='3'){
+            addMessage(chat1,'تم إلغاء الرحلة','bot');
+            addMessage(chat2,`تم إلغاء الرحلة: رقم العميل ${tempTripNumber}`,'bot');
+        }
+
+        input2.value='';
+    }
+});
+</script>
+</body>
+</html>
