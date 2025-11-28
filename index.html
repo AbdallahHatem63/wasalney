@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>واتساب</title>
+<title>واتساب - نموذج تجريبي</title>
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
@@ -50,11 +50,13 @@ header{
   background: linear-gradient(135deg,#1f2933,#122428);
   display:inline-flex;align-items:center;justify-content:center;
   margin-left:12px;
+  overflow:hidden;
 }
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
 .title{
   display:flex;flex-direction:column;justify-content:center;
 }
-.title .name{font-weight:600;font-size:15px}
+.title .name{font-weight:600;font-size:15px;color:#fff}
 .title .status{font-size:12px;color:var(--muted);margin-top:3px}
 main.chat{
   flex:1;
@@ -63,6 +65,7 @@ main.chat{
   padding:18px;
   overflow:auto;
   background: rgba(0,0,0,0.05);
+  gap:6px;
 }
 .composer{
   display:flex;
@@ -135,10 +138,10 @@ footer{
 <body>
 
 <!-- العميل -->
-<div class="app">
+<div class="app" id="client-app">
   <header>
     <div class="avatar">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyvKop5GGRLWxLxIy3oUrdmmiym3tOQaEDpWfKOMjuMENuhn3-" alt="صورة العميل" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+      <img src="https://raw.githubusercontent.com/AbdallahHatem63/watsapp.taxibader/refs/heads/main/ChatGPT%20Image%20Nov%2028%2C%202025%2C%2002_41_59%20PM.png" alt="صورة العميل">
     </div>
     <div style="width:12px"></div>
     <div class="title">
@@ -146,11 +149,11 @@ footer{
       <div class="status">نشط الآن</div>
     </div>
   </header>
-  <main class="chat"></main>
+  <main class="chat" aria-live="polite"></main>
   <div class="composer">
-    <div class="micro"></div>
+    <div class="micro" title="تسجيل صوتي"><i class="fa fa-microphone"></i></div>
     <div class="input">
-      <input placeholder="اكتب رسالة" />
+      <input placeholder="اكتب رسالة" aria-label="حقل الرسالة العميل" />
       <button class="send-btn">إرسال</button>
     </div>
   </div>
@@ -166,10 +169,10 @@ footer{
 </div>
 
 <!-- الكباتن -->
-<div class="app">
+<div class="app" id="captains-app">
   <header>
     <div class="avatar">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyvKop5GGRLWxLxIy3oUrdmmiym3tOQaEDpWfKOMjuMENuhn3-" alt="صورة الكباتن" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+      <img src="https://raw.githubusercontent.com/AbdallahHatem63/watsapp.taxibader/refs/heads/main/ChatGPT%20Image%20Nov%2028%2C%202025%2C%2002_41_59%20PM.png" alt="صورة الكباتن">
     </div>
     <div style="width:12px"></div>
     <div class="title">
@@ -177,11 +180,11 @@ footer{
       <div class="status">انقر هنا للاطلاع علي معلومات المجموعه</div>
     </div>
   </header>
-  <main class="chat"></main>
+  <main class="chat" aria-live="polite"></main>
   <div class="composer">
-    <div class="micro"></div>
+    <div class="micro" title="تسجيل صوتي"><i class="fa fa-microphone"></i></div>
     <div class="input">
-      <input placeholder="اكتب رسالة" />
+      <input placeholder="اكتب رسالة" aria-label="حقل الرسالة الكباتن" />
       <button class="send-btn">إرسال</button>
     </div>
   </div>
@@ -198,8 +201,9 @@ footer{
 
 <script>
 // عناصر التطبيقات
-const app1 = document.querySelectorAll('.app')[0];
-const app2 = document.querySelectorAll('.app')[1];
+const apps = document.querySelectorAll('.app');
+const app1 = apps[0]; // العميل
+const app2 = apps[1]; // الكباتن
 
 const chat1 = app1.querySelector('.chat');
 const chat2 = app2.querySelector('.chat');
@@ -210,11 +214,11 @@ const input2 = app2.querySelector('input');
 const btn1 = app1.querySelector('.send-btn');
 const btn2 = app2.querySelector('.send-btn');
 
-let state1 = 'start'; 
+let state1 = 'start';
 let complaintDesc='', complaintClient='', complaintCaptain='';
 let tempTripNumber='';
 
-// دالة لإضافة الرسائل
+// دالة لإضافة الرسائل (مبسطة)
 function addMessage(chat, text, sender='user') {
     const msg = document.createElement('div');
     msg.textContent = text;
@@ -225,14 +229,15 @@ function addMessage(chat, text, sender='user') {
     msg.style.color = '#fff';
     msg.style.wordBreak = 'break-word';
     msg.style.display = 'inline-block';
+    msg.style.alignSelf = (sender==='user') ? 'flex-end' : 'flex-start';
     if(sender==='user'){
-        msg.style.background = '#25D366';
-        msg.style.alignSelf = 'flex-end';
+        msg.style.background = 'var(--accent)';
+        msg.style.color = '#000';
     } else {
         msg.style.background = '#444';
-        msg.style.alignSelf = 'flex-start';
     }
     chat.appendChild(msg);
+    // تمرير المؤشر لأسفل
     chat.scrollTop = chat.scrollHeight;
 }
 
@@ -241,29 +246,76 @@ addMessage(chat1, "أهلا بك في خدمة تاكسي بدر، اكتب 1 ل
 
 // دالة إرسال الرسالة
 function handleSend(input, chat){
-    if(input.value.trim()==='') return;
     const val = input.value.trim();
+    if(!val) return;
     addMessage(chat, val, 'user');
 
-    if(chat===chat1){
-        if(state1==='start'){ addMessage(chat1,'أهلا بك','bot'); state1='askedPlace'; }
-        else if(state1==='askedPlace'){
-            if(val==='1'){ addMessage(chat1,'ممكن تقولي مكانك فين و رايح فين','bot'); state1='askedNumber'; }
-            else if(val==='2'){ addMessage(chat1,'تعريف الرحلات:\n- فتح عداد: 10 جنيه\n- 7 جنيه لكل كيلو\n- 50 قرش لكل دقيقة','bot'); }
-            else if(val==='0'){ addMessage(chat1,'ممكن حضرتك توصفلي مشكلتك','bot'); state1='complaintDesc'; }
-            else if(val==='3'){ addMessage(chat1,'تم إلغاء رحلتك','bot'); addMessage(chat2,`تم إلغاء الرحلة: رقم العميل ${tempTripNumber}`,'bot'); state1='done'; }
-            else{ addMessage(chat1,'ممكن تقولي رقم حضرتك','bot'); state1='askedNumber'; }
+    if(chat === chat1){ // العميل
+        if(state1 === 'start'){
+            addMessage(chat1,'أهلا بك! كيف أقدر أساعدك؟','bot');
+            state1 = 'askedPlace';
+        } else if(state1 === 'askedPlace'){
+            if(val === '1'){
+                addMessage(chat1,'ممكن تقولي مكانك فين و رايح فين؟','bot');
+                state1='askedNumber';
+            } else if(val === '2'){
+                addMessage(chat1,'تعريف الرحلات:\n- فتح عداد: 10 جنيه\n- 7 جنيه لكل كيلو\n- 50 قرش لكل دقيقة','bot');
+            } else if(val === '0'){
+                addMessage(chat1,'ممكن حضرتك توصفلي مشكلتك؟','bot');
+                state1='complaintDesc';
+            } else if(val === '3'){
+                addMessage(chat1,'تم إلغاء رحلتك','bot');
+                addMessage(chat2, `تم إلغاء الرحلة: رقم العميل ${tempTripNumber}`, 'bot');
+                state1='done';
+            } else {
+                // نعتبر القيمة هى المكان (مثال بسيط)
+                tempTripNumber = val; // نستخدمها كمُعرّف مؤقت
+                addMessage(chat1,'رحلة جديدة تم إرسالها للكباتن','bot');
+                addMessage(chat2, `رحلة جديدة من العميل: موقع/تفاصيل - ${val}\nرقم الرحلة المؤقت: ${tempTripNumber}`, 'bot');
+                state1='waitingDrivers';
+            }
+        } else if(state1 === 'askedNumber'){
+            tempTripNumber = val;
+            addMessage(chat1,'رحلة جديدة تم إرسالها للكباتن','bot');
+            addMessage(chat2,`رحلة جديدة: مكان العميل ${val}\nرقم الرحلة: ${tempTripNumber}`,'bot');
+            state1 = 'waitingDrivers';
+        } else if(state1 === 'complaintDesc'){
+            complaintDesc = val;
+            addMessage(chat1,'ممكن اسم حضرتك؟','bot');
+            state1='complaintClient';
+        } else if(state1 === 'complaintClient'){
+            complaintClient = val;
+            addMessage(chat1,'ممكن اسم الكابتن؟','bot');
+            state1='complaintCaptain';
+        } else if(state1 === 'complaintCaptain'){
+            complaintCaptain = val;
+            addMessage(chat1,'متأسفين لحضرتك سيتم مراجعة شكوتك الآن','bot');
+            addMessage(chat2,`العميل ${complaintClient} بيشتكي من الكابتن ${complaintCaptain}، نوع الشكوى: ${complaintDesc}`,'bot');
+            state1='done';
+        } else {
+            addMessage(chat1,'تم استلام رسالتك. شكراً','bot');
         }
-        else if(state1==='askedNumber'){ tempTripNumber=val; addMessage(chat1,'رحلة جديدة تم إرسالها للكباتن','bot'); addMessage(chat2,`رحلة جديدة: مكان العميل ${val}`,'bot'); state1='done'; }
-        else if(state1==='complaintDesc'){ complaintDesc=val; addMessage(chat1,'ممكن اسم حضرتك','bot'); state1='complaintClient'; }
-        else if(state1==='complaintClient'){ complaintClient=val; addMessage(chat1,'ممكن اسم الكابتن','bot'); state1='complaintCaptain'; }
-        else if(state1==='complaintCaptain'){ complaintCaptain=val; addMessage(chat1,'متأسفين لحضرتك سيتم مراجعة شكوتك الآن','bot'); addMessage(chat2,`العميل ${complaintClient} بيشتكي من الكابتن ${complaintCaptain}، نوع الشكوى: ${complaintDesc}`,'bot'); state1='done'; }
-    } else { // app2
-        if(val.toLowerCase()==='قبول'){ addMessage(chat1, `كابتن محمد قبل رحلتك. كابتن محمد جاي في الطريق`, 'bot'); }
-        else if(val==='3'){ addMessage(chat1,'تم إلغاء الرحلة','bot'); addMessage(chat2,`تم إلغاء الرحلة: رقم العميل ${tempTripNumber}`,'bot'); }
+    } else { // app2 (الكباتن)
+        const low = val.toLowerCase();
+        if(low.includes('قبول') || low === 'قبول'){
+            // مثال: اسم و رقم الكابتن افتراضياً - ممكن تعدل يستخرج من حساب الكابتن
+            const captainName = 'محمد';
+            const captainPhone = '010XXXXXXXX';
+            addMessage(chat2, `تم قبول الرحلة من ${captainName}`, 'bot');
+            addMessage(chat1, `كابتن ${captainName} قبل رحلتك. رقم الكابتن: ${captainPhone}. جاي في الطريق.`, 'bot');
+            // ممكن تغير حالة الرحلة لو عايز
+            state1 = 'assigned';
+        } else if(val === '3' || low.includes('الغاء') || low.includes('إلغاء')){
+            addMessage(chat2,'تم إلغاء الرحلة من قبل الكابتن','bot');
+            addMessage(chat1,`تم إلغاء الرحلة: رقم العميل ${tempTripNumber}`,'bot');
+            state1='done';
+        } else {
+            // رسالة ضمن الجروب للكباتن
+            addMessage(chat2, 'رسالة للجروب: ' + val, 'bot');
+        }
     }
 
-    input.value='';
+    input.value = '';
 }
 
 // أحداث الأزرار
@@ -271,8 +323,8 @@ btn1.addEventListener('click', ()=> handleSend(input1, chat1));
 btn2.addEventListener('click', ()=> handleSend(input2, chat2));
 
 // إرسال Enter
-input1.addEventListener('keydown', e=>{ if(e.key==='Enter') handleSend(input1, chat1); });
-input2.addEventListener('keydown', e=>{ if(e.key==='Enter') handleSend(input2, chat2); });
+input1.addEventListener('keydown', e=>{ if(e.key==='Enter') { e.preventDefault(); handleSend(input1, chat1); } });
+input2.addEventListener('keydown', e=>{ if(e.key==='Enter') { e.preventDefault(); handleSend(input2, chat2); } });
 
 </script>
 </body>
