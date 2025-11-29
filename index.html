@@ -1,10 +1,10 @@
+
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>واتساب - نموذج تجريبي</title>
-<link rel="icon" type="image/png" href="logo.png">
+<title>ازاي اطلب رحله من خدمة وصلني ؟</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
 :root{
@@ -159,12 +159,6 @@ footer{
   </div>
   <footer>
     لا تعتبر هذه النسخة النهائية للمستخدم<br>
-    للتواصل معنا
-    <div class="social-icons">
-      <a href="https://www.facebook.com/abdallah.hatem.462120/" target="_blank"><i class="fab fa-facebook-f"></i></a>
-      <a href="https://wa.me/201064152956" target="_blank"><i class="fab fa-whatsapp"></i></a>
-      <a href="https://www.instagram.com/beboabdallahh/" target="_blank"><i class="fab fa-instagram"></i></a>
-    </div>
   </footer>
 </div>
 
@@ -190,142 +184,153 @@ footer{
   </div>
   <footer>
     لا تعتبر هذه النسخة النهائية للمستخدم<br>
-    للتواصل معنا
-    <div class="social-icons">
-      <a href="https://www.facebook.com/abdallah.hatem.462120/" target="_blank"><i class="fab fa-facebook-f"></i></a>
-      <a href="https://wa.me/201064152956" target="_blank"><i class="fab fa-whatsapp"></i></a>
-      <a href="https://www.instagram.com/beboabdallahh/" target="_blank"><i class="fab fa-instagram"></i></a>
-    </div>
   </footer>
 </div>
 
 <script>
 // عناصر التطبيقات
-const apps = document.querySelectorAll('.app');
-const app1 = apps[0]; // العميل
-const app2 = apps[1]; // الكباتن
+const appClient = document.getElementById('client-app');
+const appCaptains = document.getElementById('captains-app');
 
-const chat1 = app1.querySelector('.chat');
-const chat2 = app2.querySelector('.chat');
+const chatClient = appClient.querySelector('.chat');
+const chatCaptains = appCaptains.querySelector('.chat');
 
-const input1 = app1.querySelector('input');
-const input2 = app2.querySelector('input');
+const inputClient = appClient.querySelector('input');
+const inputCaptains = appCaptains.querySelector('input');
 
-const btn1 = app1.querySelector('.send-btn');
-const btn2 = app2.querySelector('.send-btn');
+const btnClient = appClient.querySelector('.send-btn');
+const btnCaptains = appCaptains.querySelector('.send-btn');
 
-let state1 = 'start';
+// حالة الرحلات والشكاوى
+let rides = [];
+let rideCounter = 0;
+let stateClient = 'start';
+let tempTripNumber = '';
 let complaintDesc='', complaintClient='', complaintCaptain='';
-let tempTripNumber='';
 
-// دالة لإضافة الرسائل (مبسطة)
-function addMessage(chat, text, sender='user') {
-    const msg = document.createElement('div');
-    msg.textContent = text;
-    msg.style.padding = '8px 12px';
-    msg.style.marginBottom = '8px';
-    msg.style.borderRadius = '8px';
-    msg.style.maxWidth = '80%';
+// توليد رقم رحلة MMDD + counter
+function generateRideId() {
+  const now = new Date();
+  const month = String(now.getMonth()+1).padStart(2,'0');
+  const day = String(now.getDate()).padStart(2,'0');
+  rideCounter++;
+  return month+day+String(rideCounter).padStart(3,'0');
+}
+
+// إضافة رسالة للواجهة
+function addMessage(chat, text, sender='user'){
+  const msg = document.createElement('div');
+  msg.textContent = text;
+  msg.style.padding = '8px 12px';
+  msg.style.marginBottom = '8px';
+  msg.style.borderRadius = '8px';
+  msg.style.maxWidth = '80%';
+  msg.style.wordBreak = 'break-word';
+  msg.style.display = 'inline-block';
+  msg.style.alignSelf = (sender==='user')?'flex-end':'flex-start';
+  if(sender==='user'){
+    msg.style.background = 'var(--accent)';
+    msg.style.color = '#000';
+  } else {
+    msg.style.background = '#444';
     msg.style.color = '#fff';
-    msg.style.wordBreak = 'break-word';
-    msg.style.display = 'inline-block';
-    msg.style.alignSelf = (sender==='user') ? 'flex-end' : 'flex-start';
-    if(sender==='user'){
-        msg.style.background = 'var(--accent)';
-        msg.style.color = '#000';
-    } else {
-        msg.style.background = '#444';
-    }
-    chat.appendChild(msg);
-    // تمرير المؤشر لأسفل
-    chat.scrollTop = chat.scrollHeight;
+  }
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
 }
 
 // رسالة ترحيبية
-addMessage(chat1, "أهلا بك في خدمة وصلني، اكتب 1 للرحلة، 2 لتعريف الرحلات، 0 لتقديم شكوى", 'bot');
+addMessage(chatClient,`اهلا بك في خدمه وصلني
+لطلب رحله اكتب 1
+لمعرفه التعريفه اكتب 2
+لو عندك شكوي او مقترحات اكتب 0`,'bot');
 
-// دالة إرسال الرسالة
-function handleSend(input, chat){
-    const val = input.value.trim();
-    if(!val) return;
-    addMessage(chat, val, 'user');
+// تعامل العميل
+function handleClientSend(val){
+  val = val.trim();
+  if(!val) return;
+  addMessage(chatClient,val,'user');
 
-    if(chat === chat1){ // العميل
-        if(state1 === 'start'){
-            addMessage(chat1,'أهلا بك! كيف أقدر أساعدك؟','bot');
-            state1 = 'askedPlace';
-        } else if(state1 === 'askedPlace'){
-            if(val === '1'){
-                addMessage(chat1,'ممكن تقولي مكانك فين و رايح فين؟','bot');
-                state1='askedNumber';
-            } else if(val === '2'){
-                addMessage(chat1,'تعريف الرحلات:\n- فتح عداد: 10 جنيه\n- 7 جنيه لكل كيلو\n- 50 قرش لكل دقيقة','bot');
-            } else if(val === '0'){
-                addMessage(chat1,'ممكن حضرتك توصفلي مشكلتك؟','bot');
-                state1='complaintDesc';
-            } else if(val === '3'){
-                addMessage(chat1,'تم إلغاء رحلتك','bot');
-                addMessage(chat2, `تم إلغاء الرحلة: رقم العميل ${tempTripNumber}`, 'bot');
-                state1='done';
-            } else {
-                // نعتبر القيمة هى المكان (مثال بسيط)
-                tempTripNumber = val; // نستخدمها كمُعرّف مؤقت
-                addMessage(chat1,'رحلة جديدة تم إرسالها للكباتن','bot');
-                addMessage(chat2, `رحلة جديدة من العميل: موقع/تفاصيل - ${val}\nرقم الرحلة المؤقت: ${tempTripNumber}`, 'bot');
-                state1='waitingDrivers';
-            }
-        } else if(state1 === 'askedNumber'){
-            tempTripNumber = val;
-            addMessage(chat1,'رحلة جديدة تم إرسالها للكباتن','bot');
-            addMessage(chat2,`رحلة جديدة: مكان العميل ${val}\nرقم الرحلة: ${tempTripNumber}`,'bot');
-            state1 = 'waitingDrivers';
-        } else if(state1 === 'complaintDesc'){
-            complaintDesc = val;
-            addMessage(chat1,'ممكن اسم حضرتك؟','bot');
-            state1='complaintClient';
-        } else if(state1 === 'complaintClient'){
-            complaintClient = val;
-            addMessage(chat1,'ممكن اسم الكابتن؟','bot');
-            state1='complaintCaptain';
-        } else if(state1 === 'complaintCaptain'){
-            complaintCaptain = val;
-            addMessage(chat1,'متأسفين لحضرتك سيتم مراجعة شكوتك الآن','bot');
-            addMessage(chat2,`العميل ${complaintClient} بيشتكي من الكابتن ${complaintCaptain}، نوع الشكوى: ${complaintDesc}`,'bot');
-            state1='done';
-        } else {
-            addMessage(chat1,'تم استلام رسالتك. شكراً','bot');
-        }
-    } else { // app2 (الكباتن)
-        const low = val.toLowerCase();
-        if(low.includes('قبول') || low === 'قبول'){
-            // مثال: اسم و رقم الكابتن افتراضياً - ممكن تعدل يستخرج من حساب الكابتن
-            const captainName = 'محمد';
-            const captainPhone = '010XXXXXXXX';
-            addMessage(chat2, `تم قبول الرحلة من ${captainName}`, 'bot');
-            addMessage(chat1, `كابتن ${captainName} قبل رحلتك. رقم الكابتن: ${captainPhone}. جاي في الطريق.`, 'bot');
-            // ممكن تغير حالة الرحلة لو عايز
-            state1 = 'assigned';
-        } else if(val === '3' || low.includes('الغاء') || low.includes('إلغاء')){
-            addMessage(chat2,'تم إلغاء الرحلة من قبل الكابتن','bot');
-            addMessage(chat1,`تم إلغاء الرحلة: رقم العميل ${tempTripNumber}`,'bot');
-            state1='done';
-        } else {
-            // رسالة ضمن الجروب للكباتن
-            addMessage(chat2, 'رسالة للجروب: ' + val, 'bot');
-        }
+  if(stateClient==='start'){
+    if(val==='1'){
+      addMessage(chatClient,'من فضل اكتب مكانك ورايح فين؟','bot');
+      stateClient='askedPlace';
+    } else if(val==='2'){
+      addMessage(chatClient,'💰 حساب المشوار:\n10 جنيه فتح عداد\n7 جنيه لكل كيلو بعد ذلك\n50 قرش لكل دقيقة','bot');
+    } else if(val==='0'){
+      addMessage(chatClient,'📢 اكتب تفاصيل شكوتك','bot');
+      stateClient='complaintDesc';
+    } else {
+      addMessage(chatClient,'❌ لم أفهم الرسالة، اكتب 1 أو 2 أو 0','bot');
     }
-
-    input.value = '';
+  } else if(stateClient==='askedPlace'){
+    tempTripNumber = generateRideId();
+    rides.push({id: tempTripNumber, details: val, status:'pending', driverName:'', driverPhone:''});
+    addMessage(chatClient,`✅ تم تسجيل رحلتك. رقم الرحلة: ${tempTripNumber}`,'bot');
+    addMessage(chatCaptains,`🚖 رحلة جديدة: ${val}\nرقم الرحلة: ${tempTripNumber}`,'bot');
+    stateClient='waitingDrivers';
+  } else if(stateClient==='waitingDrivers'){
+    if(val==='3'){
+      const ride = rides.find(r=>r.status==='pending');
+      if(ride){
+        ride.status='cancelled';
+        addMessage(chatClient,`❌ تم إلغاء الرحلة رقم ${ride.id}`,'bot');
+        addMessage(chatCaptains,`🚫 تم إلغاء الرحلة من العميل. رقم الرحلة: ${ride.id}`,'bot');
+      }
+    }
+  } else if(stateClient==='complaintDesc'){
+    complaintDesc=val;
+    addMessage(chatClient,'🙋‍♂️ اكتب اسمك','bot');
+    stateClient='complaintClient';
+  } else if(stateClient==='complaintClient'){
+    complaintClient=val;
+    addMessage(chatClient,'📝 اكتب اسم الكابتن','bot');
+    stateClient='complaintCaptain';
+  } else if(stateClient==='complaintCaptain'){
+    complaintCaptain=val;
+    addMessage(chatClient,'✅ تم تسجيل شكواك وسيتم متابعتها','bot');
+    addMessage(chatCaptains,`⚠️ العميل ${complaintClient} بيشتكي من الكابتن ${complaintCaptain}\nنوع الشكوى: ${complaintDesc}`,'bot');
+    stateClient='start';
+  }
 }
 
-// أحداث الأزرار
-btn1.addEventListener('click', ()=> handleSend(input1, chat1));
-btn2.addEventListener('click', ()=> handleSend(input2, chat2));
+// تعامل الكباتن
+function handleCaptainSend(val){
+  val = val.trim();
+  if(!val) return;
+  addMessage(chatCaptains,val,'user');
+
+  const low = val.toLowerCase();
+  if(low.includes('قبول')){
+    const ride = rides.find(r=>r.status==='pending');
+    if(ride){
+      ride.status='accepted';
+      ride.driverName='محمد';
+      ride.driverPhone='010XXXXXXXX';
+      addMessage(chatCaptains,`✅ تم قبول الرحلة رقم ${ride.id} من ${ride.driverName}`,'bot');
+      addMessage(chatClient,`🎉 كابتن ${ride.driverName} قبل رحلتك. رقم الكابتن: ${ride.driverPhone}`,'bot');
+    } else {
+      addMessage(chatCaptains,'❌ لا توجد رحلات للقبول','bot');
+    }
+  } else if(low.includes('إلغاء') || low.includes('الغاء')){
+    const ride = rides.find(r=>r.status==='pending' || r.status==='accepted');
+    if(ride){
+      ride.status='cancelled';
+      addMessage(chatCaptains,`🚫 تم إلغاء الرحلة رقم ${ride.id}`,'bot');
+      addMessage(chatClient,`❌ تم إلغاء رحلتك رقم ${ride.id} من الكابتن`,'bot');
+    }
+  } else {
+    addMessage(chatCaptains,'💬 رسالة للجروب: '+val,'bot');
+  }
+}
+
+// أزرار إرسال
+btnClient.addEventListener('click',()=>{handleClientSend(inputClient.value); inputClient.value='';});
+btnCaptains.addEventListener('click',()=>{handleCaptainSend(inputCaptains.value); inputCaptains.value='';});
 
 // إرسال Enter
-input1.addEventListener('keydown', e=>{ if(e.key==='Enter') { e.preventDefault(); handleSend(input1, chat1); } });
-input2.addEventListener('keydown', e=>{ if(e.key==='Enter') { e.preventDefault(); handleSend(input2, chat2); } });
-
+inputClient.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault(); handleClientSend(inputClient.value); inputClient.value='';}});
+inputCaptains.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault(); handleCaptainSend(inputCaptains.value); inputCaptains.value='';}});
 </script>
 </body>
 </html>
